@@ -10,7 +10,8 @@ void printTreeInorder(BST* bst);
 void inorder(TreeNode * root);
 void destroyBST(BST * bst);
 int findIndexNFromLast(BST * bst, int N);
-
+int reversInorder(TreeNode * node, int N);
+int sameHeightLeaves(BST * bst);
 
 void initBST(BST* bst)
 {
@@ -64,18 +65,54 @@ void destroyBST(BST* bst) {
 
 int findIndexNFromLast(BST* bst, int N) {
 	if (bst == NULL) { exit(1); };
-
+	return reversInorder(bst->root, N);
 }
 
 int reversInorder(TreeNode* node, int N) {
-	if (N == 0)
+	if (N == 0) {
+		if (node == NULL)
+			exit(1);
+
 		return node->element;
+	}
 	
 	if (node != NULL) {
 		reversInorder(node->right,--N);
-		reversInorder(node->left,--N);
+		reversInorder(node->left, --N);
 	}
-	
 }
 
+int sameHeightLeaves(BST* bst) {
+	int* leftLevel = (int*)malloce(sizeof(int));
+	if (!leftLevel) { exit(1); }
+	if(checkUtil(bst->root,0,leftLevel)==1)
+		return 1;
+	else
+		return 0;
+
+}
+
+int checkUtil(TreeNode* root, int level, int* leafLevel)
+{
+	// Base case
+	if (root == NULL)  return 1;
+
+	// If a leaf node is encountered
+	if (root->left == NULL && root->right == NULL)
+	{
+		// When a leaf node is found first time
+		if (*leafLevel == 0)
+		{
+			*leafLevel = level; // Set first found leaf's level
+			return 1;
+		}
+
+		// If this is not first leaf node, compare its level with
+		// first leaf's level
+		return (level == *leafLevel);
+	}
+
+	// If this node is not leaf, recursively check left and right subtrees
+	return (checkUtil(root->left, level + 1, leafLevel) && checkUtil(root->right, level + 1, leafLevel));
+}
 
