@@ -1,5 +1,3 @@
-void initBST(BST* bst);
-void insertBST(BST* bst, int value);
 #ifndef _BST_ADT_H
 #define _BST_ADT_H
 

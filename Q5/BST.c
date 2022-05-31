@@ -1,7 +1,7 @@
-#include <stdio.h>
 #include "BST.h"
 #include "TreePrintLibrary.h"
-
+#include <stdio.h>
+#include <stdlib.h>
 #define ifNull(parameter)do{ if ((parameter) == NULL){ printf("allocation failed"); exit(1);}}while(0);
 void initBST(BST* bst);
 void insertBST(BST* bst, int value);
@@ -12,6 +12,7 @@ void destroyBST(BST * bst);
 int findIndexNFromLast(BST * bst, int N);
 int reversInorder(TreeNode * node, int N);
 int sameHeightLeaves(BST * bst);
+int checkUtil(TreeNode * root, int level, int* leafLevel);
 
 void initBST(BST* bst)
 {
@@ -44,19 +45,19 @@ void insert(TreeNode* root, TreeNode* newNode) {
 
 void printTreeInorder(BST* bst) {
 	if (bst == NULL) { printf("The tree is empty\n"); return 0; }
-	inorder(bst);
+	inorder(bst->root);
 }
 
 void inorder(TreeNode* root) {
 	if (root != NULL) {
 		inorder(root->left);
-		printf("%d", root->element);
+		printf("%d\t", root->element);
 		inorder(root->right);
 	}
 }
 
 void destroyBST(BST* bst) {
-	if (bst == NULL)
+	if (bst->root == NULL)
 		return;
 	destroyBST(bst->root->left);
 	destroyBST(bst->root->right);
@@ -83,7 +84,7 @@ int reversInorder(TreeNode* node, int N) {
 }
 
 int sameHeightLeaves(BST* bst) {
-	int* leftLevel = (int*)malloce(sizeof(int));
+	int* leftLevel = (int*)malloc(sizeof(int));
 	if (!leftLevel) { exit(1); }
 	if(checkUtil(bst->root,0,leftLevel)==1)
 		return 1;
